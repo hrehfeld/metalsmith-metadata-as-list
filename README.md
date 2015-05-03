@@ -1,10 +1,10 @@
-# metalsmith-tags
+# metalsmith-metadata-as-list
 
-  A metalsmith plugin to create dedicated pages for tags in provided in metalsmith pages.
+  A metalsmith plugin to split a metadata field into a list at delimiter.
 
 ## Installation
 
-    $ npm install metalsmith-tags
+    $ npm install metalsmith-metadata-as-list
 
 ## Description in Pages
 
@@ -29,12 +29,8 @@ You can use different handle for the tags, by configuring the `handle` option. `
 ```json
 {
   "plugins": {
-    "metalsmith-tags": {
+    "metalsmith-metadata-as-list": {
       "handle": "tags",
-      "path": "topics/:tag.html",
-      "template": "/partials/tag.hbt",
-      "sortBy": "date",
-      "reverse": true
     }
   }
 }
@@ -45,10 +41,10 @@ You can use different handle for the tags, by configuring the `handle` option. `
   Pass the plugin to `Metalsmith#use`:
 
 ```js
-var tags = require('metalsmith-tags');
+var split = require('metalsmith-metadata-as-list');
 
 metalsmith
-    .use(tags({
+    .use(split({
         handle: 'tags',                  // yaml key for tag list in you pages
         path:'topics/:tag.html',                   // path for result pages
         template:'/partials/tag.hbt',    // template to use for tag listing
@@ -56,36 +52,6 @@ metalsmith
         reverse: true                    // sort direction (optional)
     }));
 ```
-
-## Result
-
-  This will generate `topics/[tagname].html` pages in your `build` directory with array of `pagination.files` objects on which you can iterate on. You can use `tag` for tag name in your templates. (You can refer to tests folder for tags template.)
-
-  The `tags` property on your pages will remain but it will be modified to an array of String containing the tags.
-
-  You can use `metalsmith-permalink` to customize the permalink of the tag pages as you would do with anything else.
-
-  It is possible to use `opts.metadataKey` for defining the name of the global tag list.
-  By default it is `'tags'`.
-
-## Pagination
-
-  Additionally you can paginate your tag pages.  To do so add two additional properties to your configuration object, `pathPage` and `perPage`, and modify `path` to point to the root pagination location:
-
-```json
-{
-  "handle": "tags",
-  "path": "topics/:tag/index.html",
-  "pathPage": "topics/:tag/:num/index.html",
-  "perPage": 6,
-  "template": "/partials/tag.hbt",
-  "sortBy": "date",
-  "reverse": true
-}
-```
-
-  This will paginate your array of tags so that 6 appear per page, with additional tag pages being nested underneath the first page of tags.  For additional details please look at the tests.
-
 ## Contribution
 
   Feel free to contribute to this plug-in. Fork, commit, send pull request.
